@@ -1,0 +1,36 @@
+{
+    "env": {
+      "mocha": "true"
+    },
+    "extends": [
+      "airbnb-base",
+      "prettier"
+    ],
+    "plugins": [
+      "mocha",
+      "chai-friendly"
+    ],
+    "rules" : {
+      "mocha/handle-done-callback": "error",
+      "mocha/max-top-level-suites": "error",
+      "mocha/no-exclusive-tests": "error",
+      "mocha/no-global-tests": "error",
+      "mocha/no-hooks-for-single-case": "error",
+      "mocha/no-identical-title": "error",
+      "mocha/no-mocha-arrows": "off",
+      "mocha/no-nested-tests": "error",
+      "mocha/no-pending-tests": "error",
+      "mocha/no-return-and-callback": "error",
+      "mocha/no-setup-in-describe": "error",
+      "mocha/no-sibling-hooks": "error",
+      "mocha/no-skipped-tests": "off",
+      "mocha/no-synchronous-tests": "off",
+      "mocha/no-top-level-hooks": "error",
+      "mocha/prefer-arrow-callback": "off",
+      "mocha/valid-suite-description": "off",
+      "mocha/valid-test-description": "off",
+      "prefer-destructuring": "off",
+      "no-unused-expressions": "off",
+      "chai-friendly/no-unused-expressions": "error"
+    }
+}
