@@ -6,8 +6,6 @@ function Flight() {
   const gatwick = 'https://www.gatwickairport.com/flights/departures-results/?flight=';
   let flightDetails;
 
-  const getUrl = () => gatwick;
-
   const handleReturnValue = callback => {
     if (flightDetails.code === null) {
       callback(null);
@@ -43,9 +41,7 @@ function Flight() {
   };
 
   this.getFlight = (code, callback) => {
-    const url = getUrl(code);
-
-    fetchFlightDetails(url, code, callback);
+    fetchFlightDetails(gatwick, code, callback);
   };
 }
 

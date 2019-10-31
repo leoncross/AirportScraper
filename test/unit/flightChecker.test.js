@@ -3,9 +3,9 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nock = require('nock');
 
-const gatwickCompleteClone = require('./fetchFiles/gatwickCompleteClone.json');
-const gatwickNoGateClone = require('./fetchFiles/gatwickNoGateClone.json');
-const gatwickFlightNotFound = require('./fetchFiles/gatwickFlightNotFound.json');
+const gatwickCompleteClone = require('./mockedFetchFiles/gatwickCompleteClone.json');
+const gatwickNoGateClone = require('./mockedFetchFiles/gatwickNoGateClone.json');
+const gatwickFlightNotFound = require('./mockedFetchFiles/gatwickFlightNotFound.json');
 
 chai.use(sinonChai);
 
