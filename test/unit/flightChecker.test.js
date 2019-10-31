@@ -3,7 +3,9 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nock = require('nock');
 
-const website = require('./fetchFiles/website.json')
+const gatwickCompleteClone = require('./fetchFiles/gatwickCompleteClone.json');
+const gatwickNoGateClone = require('./fetchFiles/gatwickNoGateClone.json');
+const gatwickFlightNotFound = require('./fetchFiles/gatwickFlightNotFound.json');
 
 chai.use(sinonChai);
 
@@ -13,54 +15,91 @@ const Flight = require('../../src/flightChecker');
 
 describe('flightChecker', () => {
   let flight;
-  let mockFetchCall
 
-  function setupMockServer (code) {
+  let mockFetchCall;
+  let callbackSpy;
+
+  function setupMockServer(code, website) {
     const baseURL = 'https://www.gatwickairport.com';
     const path = '/flights/departures-results/?flight=';
 
-    return mockFetchCall = nock(baseURL)
+    mockFetchCall = nock(baseURL)
       .get(path + code)
       .reply(200, website);
 
+    return mockFetchCall;
   }
 
-  beforeEach(() => {
-    flight = new Flight();
-    callbackSpy = sinon.spy()
-  });
-
   describe('#getFlight', () => {
-    it('makes a request to the gatwick website', () => {
-      const code = 'EZY837';
-      setupMockServer(code)
+    beforeEach(() => {
+      flight = new Flight();
+      callbackSpy = sinon.spy();
+    });
 
-      flight.getFlight(code, callbackSpy)
+    it('makes a fetch request', () => {
+      const code = 'EZY837';
+      setupMockServer(code, gatwickCompleteClone);
+
+      flight.getFlight(code, callbackSpy);
 
       expect(mockFetchCall.isDone()).to.be.true;
-
     });
-    it('calls to Gatwick and returns an object within the callback', (done) => {
+    it('returns object in the callback', done => {
       const code = 'EZY837';
-      setupMockServer(code)
+      setupMockServer(code, gatwickCompleteClone);
 
-      const expected = {
+      const expectedFlightObject = {
         time: '16:25',
         to: 'Belfast',
         code: 'EZY837',
         status: 'GATE OPEN',
         terminal: 'North',
         gate: '55E'
-      }
+      };
 
-      flight.getFlight(code, (data) => {
+      flight.getFlight(code, data => {
         try {
-          expect(data).to.deep.equal(expected)
-          done()
+          expect(data).to.deep.equal(expectedFlightObject);
+          done();
         } catch (err) {
-          done(err)
+          done(err);
         }
       });
-    })
+    });
+    it('handles results when no gate available', done => {
+      const code = 'TP1337';
+      setupMockServer(code, gatwickNoGateClone);
+
+      const expectedFlightObject = {
+        time: '16:20',
+        to: 'Lisbon',
+        code: 'TP1337',
+        status: 'ENQUIRE AIRLINE',
+        terminal: 'South',
+        gate: null
+      };
+
+      flight.getFlight(code, data => {
+        try {
+          expect(data).to.deep.equal(expectedFlightObject);
+          done();
+        } catch (err) {
+          done(err);
+        }
+      });
+    });
+    it('returns null when no flight found', done => {
+      const code = 'noflightfound';
+      setupMockServer(code, gatwickFlightNotFound);
+
+      flight.getFlight(code, data => {
+        try {
+          expect(data).to.equal(null);
+          done();
+        } catch (err) {
+          done(err);
+        }
+      });
+    });
   });
 });

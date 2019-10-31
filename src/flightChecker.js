@@ -1,16 +1,19 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
-const fs = require('fs');
+// const fs = require('fs');
 
 function Flight() {
   const gatwick = 'https://www.gatwickairport.com/flights/departures-results/?flight=';
   let flightDetails;
 
-  const getUrl = code => {
-    if (code) {
-      return gatwick;
+  const getUrl = () => gatwick;
+
+  const handleReturnValue = callback => {
+    if (flightDetails.code === null) {
+      callback(null);
+    } else {
+      callback(flightDetails);
     }
-    return false;
   };
 
   const formatFlightDetails = res => {
@@ -33,25 +36,17 @@ function Flight() {
     fetch(url + code)
       .then(res => res.text())
       .then(res => {
-        // fs.writeFileSync('website.json', JSON.stringify(res))
+        // fs.writeFileSync('gatwickFlightNotFound.json', JSON.stringify(res))
         formatFlightDetails(res);
-        callback(flightDetails);
-      })
-      .catch(err => {
-        console.log(err);
-      })
+        handleReturnValue(callback);
+      });
   };
 
   this.getFlight = (code, callback) => {
     const url = getUrl(code);
+
     fetchFlightDetails(url, code, callback);
   };
 }
 
 module.exports = Flight;
-//
-// const flight = new Flight();
-//
-// flight.getFlight('EZY837', details => {
-//   console.log(details);
-// });
