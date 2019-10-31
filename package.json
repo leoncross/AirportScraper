@@ -10,7 +10,9 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
+  "devDependencies": {
+    "nock": "^11.6.0"
+  },
   "dependencies": {
     "chai": "^4.2.0",
     "cheerio": "^1.0.0-rc.3",

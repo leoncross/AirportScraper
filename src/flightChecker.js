@@ -1,9 +1,10 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
+const fs = require('fs');
 
 function Flight() {
-  let flightDetails;
   const gatwick = 'https://www.gatwickairport.com/flights/departures-results/?flight=';
+  let flightDetails;
 
   const getUrl = code => {
     if (code) {
@@ -12,27 +13,33 @@ function Flight() {
     return false;
   };
 
+  const formatFlightDetails = res => {
+    const $ = cheerio.load(res);
+    flightDetails = {
+      time: $('#flight-results-listing > tr > td:nth-child(2)').html(),
+      to: $('#flight-results-listing > tr > td:nth-child(3)').html(),
+      code: $('#flight-results-listing > tr > td:nth-child(4)').html(),
+      status: $('#flight-results-listing > tr > td.doorStop > span').html(),
+      terminal: $('#flight-results-listing > tr > td:nth-child(6)').html(),
+      gate: $('#flight-results-listing > tr > td.gateOpen').html()
+    };
+
+    if (flightDetails.gate !== null) {
+      flightDetails.gate = flightDetails.gate.trim();
+    }
+  };
+
   const fetchFlightDetails = (url, code, callback) => {
     fetch(url + code)
       .then(res => res.text())
       .then(res => {
-        const $ = cheerio.load(res);
-
-        flightDetails = {
-          time: $('#flight-results-listing > tr > td:nth-child(2)').html(),
-          to: $('#flight-results-listing > tr > td:nth-child(3)').html(),
-          code: $('#flight-results-listing > tr > td:nth-child(4)').html(),
-          status: $('#flight-results-listing > tr > td.doorStop > span').html(),
-          terminal: $('#flight-results-listing > tr > td:nth-child(6)').html(),
-          gate: $('#flight-results-listing > tr > td.gateOpen').html()
-        };
-
-        if (flightDetails.gate !== null) {
-          flightDetails.gate = flightDetails.gate.trim();
-        }
-
+        // fs.writeFileSync('website.json', JSON.stringify(res))
+        formatFlightDetails(res);
         callback(flightDetails);
-      });
+      })
+      .catch(err => {
+        console.log(err);
+      })
   };
 
   this.getFlight = (code, callback) => {
@@ -41,9 +48,10 @@ function Flight() {
   };
 }
 
-module.exports = Flight
-
+module.exports = Flight;
+//
 // const flight = new Flight();
-// flight.getFlight('EJU8195', details => {
+//
+// flight.getFlight('EZY837', details => {
 //   console.log(details);
 // });
