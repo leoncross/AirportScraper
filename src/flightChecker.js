@@ -1,12 +1,13 @@
 const fetch = require('node-fetch');
-const cheerio = require('cheerio');
 // const fs = require('fs');
 
+const AirportFinder = require('./airportFinder');
+const FileFinder = require('./fileFinder');
+
 function Flight() {
-  const gatwick = 'https://www.gatwickairport.com/flights/departures-results/?flight=';
   let flightDetails;
 
-  const handleReturnValue = callback => {
+  const returnFlightDetails = callback => {
     if (flightDetails.code === null) {
       callback(null);
     } else {
@@ -14,34 +15,24 @@ function Flight() {
     }
   };
 
-  const formatFlightDetails = res => {
-    const $ = cheerio.load(res);
-    flightDetails = {
-      time: $('#flight-results-listing > tr > td:nth-child(2)').html(),
-      to: $('#flight-results-listing > tr > td:nth-child(3)').html(),
-      code: $('#flight-results-listing > tr > td:nth-child(4)').html(),
-      status: $('#flight-results-listing > tr > td.doorStop > span').html(),
-      terminal: $('#flight-results-listing > tr > td:nth-child(6)').html(),
-      gate: $('#flight-results-listing > tr > td.gateOpen').html()
-    };
-
-    if (flightDetails.gate !== null) {
-      flightDetails.gate = flightDetails.gate.trim();
-    }
+  const formatFlightDetails = (res, airportArg) => {
+    const airport = FileFinder.getFile(airportArg);
+    flightDetails = airport.scrape(res);
   };
 
-  const fetchFlightDetails = (url, code, callback) => {
-    fetch(url + code)
+  const fetchFlightDetails = (url, airport, callback) => {
+    fetch(url)
       .then(res => res.text())
       .then(res => {
         // fs.writeFileSync('gatwickFlightNotFound.json', JSON.stringify(res))
-        formatFlightDetails(res);
-        handleReturnValue(callback);
+        formatFlightDetails(res, airport);
+        returnFlightDetails(callback);
       });
   };
 
   this.getFlight = (code, callback) => {
-    fetchFlightDetails(gatwick, code, callback);
+    const { airport, url } = AirportFinder.getUrl(code);
+    fetchFlightDetails(url, airport, callback);
   };
 }
 
