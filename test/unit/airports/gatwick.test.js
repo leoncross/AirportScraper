@@ -11,7 +11,7 @@ const gatwick = require('../../../src/airports/gatwick');
 
 const expect = chai.expect;
 
-describe('#gatwick', () => {
+describe('Gatwick Airport', () => {
   describe('#scrape', () => {
     it('finds flight details with gate', () => {
       const flightDetails = {

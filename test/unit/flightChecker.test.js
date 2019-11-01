@@ -3,10 +3,6 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nock = require('nock');
 
-const gatwickCompleteClone = require('./mockedFetchFiles/gatwickCompleteClone.json');
-const gatwickNoGateClone = require('./mockedFetchFiles/gatwickNoGateClone.json');
-const gatwickFlightNotFound = require('./mockedFetchFiles/gatwickFlightNotFound.json');
-
 chai.use(sinonChai);
 
 const expect = chai.expect;
@@ -25,15 +21,13 @@ describe('FlightChecker', () => {
   let airportFinderGetUrlStub;
   let fileFinderGetFileStub;
 
-  function setupMockServer(code, website) {
+  function setupMockServer(code) {
     const baseURL = 'https://www.gatwickairport.com';
     const path = '/flights/departures-results/?flight=';
 
     mockFetchCall = nock(baseURL)
       .get(path + code)
-      .reply(200, website);
-
-    return mockFetchCall;
+      .reply(200);
   }
 
   describe('#getFlight', () => {
@@ -50,7 +44,7 @@ describe('FlightChecker', () => {
 
     it('makes a fetch request', () => {
       const code = 'EZY837';
-      setupMockServer(code, gatwickCompleteClone);
+      setupMockServer(code);
       airportFinderGetUrlStub
         .withArgs(code)
         .returns({ airport: 'gatwick', url: gatwickUrl + code });
@@ -61,7 +55,7 @@ describe('FlightChecker', () => {
     });
     it('returns object in the callback', done => {
       const code = 'EZY837';
-      setupMockServer(code, gatwickCompleteClone);
+      setupMockServer(code);
 
       airportFinderGetUrlStub
         .withArgs(sinon.match.any)
@@ -89,38 +83,10 @@ describe('FlightChecker', () => {
         }
       });
     });
-    it('handles results when no gate available', done => {
-      const code = 'TP1337';
-      setupMockServer(code, gatwickNoGateClone);
-      airportFinderGetUrlStub
-        .withArgs(sinon.match.any)
-        .returns({ airport: 'gatwick', url: gatwickUrl + code });
 
-      const expectedFlightObject = {
-        time: '16:20',
-        to: 'Lisbon',
-        code: 'TP1337',
-        status: 'ENQUIRE AIRLINE',
-        terminal: 'South',
-        gate: null
-      };
-
-      fileFinderGetFileStub.returns({
-        scrape: () => expectedFlightObject
-      });
-
-      flight.getFlight(code, data => {
-        try {
-          expect(data).to.deep.equal(expectedFlightObject);
-          done();
-        } catch (err) {
-          done(err);
-        }
-      });
-    });
     it('returns null when no flight found', done => {
       const code = 'noflightfound';
-      setupMockServer(code, gatwickFlightNotFound);
+      setupMockServer(code);
       airportFinderGetUrlStub
         .withArgs(sinon.match.any)
         .returns({ airport: 'gatwick', url: gatwickUrl + code });

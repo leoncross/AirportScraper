@@ -5,7 +5,7 @@ const FileFinder = require('../../src/fileFinder');
 
 const expect = chai.expect;
 
-describe('fileFinder', () => {
+describe('FileFinder', () => {
   it('returns the gatwick file', () => {
     const file = FileFinder.getFile('gatwick');
 
