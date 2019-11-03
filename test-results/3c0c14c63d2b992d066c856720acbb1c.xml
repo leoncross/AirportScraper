@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.121" tests="9" failures="0">
+  <testsuite name="" timestamp="2019-11-03T09:00:17" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Root Suite.AirportFinder" timestamp="2019-11-03T09:00:17" tests="1" file="/Users/leoncross/Dropbox/Coding/flight-checker/test/unit/airportFinder.test.js" failures="0" time="0.002">
+    <testcase name="returns an object with airport and url" time="0.002" classname="AirportFinder">
+    </testcase>
+  </testsuite>
+  <testsuite name="Root Suite.Gatwick Airport" timestamp="2019-11-03T09:00:17" tests="0" file="/Users/leoncross/Dropbox/Coding/flight-checker/test/unit/airports/gatwick.test.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Root Suite.Gatwick Airport.#scrape" timestamp="2019-11-03T09:00:17" tests="3" file="/Users/leoncross/Dropbox/Coding/flight-checker/test/unit/airports/gatwick.test.js" failures="0" time="0.09999999999999999">
+    <testcase name="finds flight details with gate" time="0.062" classname="Gatwick Airport.#scrape">
+    </testcase>
+    <testcase name="handles flight details with no gate" time="0.024" classname="Gatwick Airport.#scrape">
+    </testcase>
+    <testcase name="handles no flight details found" time="0.014" classname="Gatwick Airport.#scrape">
+    </testcase>
+  </testsuite>
+  <testsuite name="Root Suite.FileFinder" timestamp="2019-11-03T09:00:17" tests="2" file="/Users/leoncross/Dropbox/Coding/flight-checker/test/unit/fileFinder.test.js" failures="0" time="0">
+    <testcase name="returns the gatwick file" time="0" classname="FileFinder">
+    </testcase>
+    <testcase name="returns null if no airport defined" time="0" classname="FileFinder">
+    </testcase>
+  </testsuite>
+  <testsuite name="Root Suite.FlightChecker" timestamp="2019-11-03T09:00:17" tests="0" file="/Users/leoncross/Dropbox/Coding/flight-checker/test/unit/flightChecker.test.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Root Suite.FlightChecker.#getFlight" timestamp="2019-11-03T09:00:17" tests="3" file="/Users/leoncross/Dropbox/Coding/flight-checker/test/unit/flightChecker.test.js" failures="0" time="0.019000000000000003">
+    <testcase name="makes a fetch request" time="0.016" classname="FlightChecker.#getFlight">
+    </testcase>
+    <testcase name="returns object in the callback" time="0.002" classname="FlightChecker.#getFlight">
+    </testcase>
+    <testcase name="returns null when no flight found" time="0.001" classname="FlightChecker.#getFlight">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -31,7 +31,7 @@
     "grunt-mocha-test": "^0.13.3",
     "grunt-prettier": "^1.1.0",
     "grunt-run": "^0.8.1",
-    "grunt-simple-nyc": "^2.0.0",
+    "grunt-simple-nyc": "^3.0.0",
     "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.21.0",
     "mocha-multi-reporters": "^1.1.7",
