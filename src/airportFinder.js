@@ -1,6 +1,9 @@
 const gatwick = 'https://www.gatwickairport.com/flights/departures-results/?flight=';
 
-exports.getUrl = code =>
+exports.getUrl = (code, airportCode) => {
   // TODO: Add logic when multiple airports are accepted
-
-  ({ airport: 'gatwick', url: gatwick + code });
+  if (airportCode === 'LGW') {
+    return gatwick + code;
+  }
+  return null;
+};

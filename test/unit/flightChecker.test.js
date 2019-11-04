@@ -13,6 +13,7 @@ const FileFinder = require('../../src/fileFinder');
 
 describe('FlightChecker', () => {
   const gatwickUrl = 'https://www.gatwickairport.com/flights/departures-results/?flight=';
+  const getwickCode = 'LGW';
 
   let flight;
 
@@ -45,11 +46,21 @@ describe('FlightChecker', () => {
     it('makes a fetch request', () => {
       const code = 'EZY837';
       setupMockServer(code);
-      airportFinderGetUrlStub
-        .withArgs(code)
-        .returns({ airport: 'gatwick', url: gatwickUrl + code });
+      airportFinderGetUrlStub.withArgs(sinon.match.any).returns(gatwickUrl + code);
+      const expectedFlightObject = {
+        time: '16:25',
+        to: 'Belfast',
+        code: 'EZY837',
+        status: 'GATE OPEN',
+        terminal: 'North',
+        gate: '55E'
+      };
 
-      flight.getFlight(code, callbackSpy);
+      fileFinderGetFileStub.returns({
+        scrape: () => expectedFlightObject
+      });
+
+      flight.getFlight(code, getwickCode, callbackSpy);
 
       expect(mockFetchCall.isDone()).to.be.true;
     });
@@ -57,9 +68,7 @@ describe('FlightChecker', () => {
       const code = 'EZY837';
       setupMockServer(code);
 
-      airportFinderGetUrlStub
-        .withArgs(sinon.match.any)
-        .returns({ airport: 'gatwick', url: gatwickUrl + code });
+      airportFinderGetUrlStub.withArgs(sinon.match.any).returns(gatwickUrl + code);
 
       const expectedFlightObject = {
         time: '16:25',
@@ -74,7 +83,7 @@ describe('FlightChecker', () => {
         scrape: () => expectedFlightObject
       });
 
-      flight.getFlight(code, data => {
+      flight.getFlight(code, getwickCode, data => {
         try {
           expect(data).to.deep.equal(expectedFlightObject);
           done();
@@ -87,15 +96,13 @@ describe('FlightChecker', () => {
     it('returns null when no flight found', done => {
       const code = 'noflightfound';
       setupMockServer(code);
-      airportFinderGetUrlStub
-        .withArgs(sinon.match.any)
-        .returns({ airport: 'gatwick', url: gatwickUrl + code });
+      airportFinderGetUrlStub.withArgs(sinon.match.any).returns(gatwickUrl + code);
 
       fileFinderGetFileStub.returns({
         scrape: () => ({ code: null })
       });
 
-      flight.getFlight(code, data => {
+      flight.getFlight(code, getwickCode, data => {
         try {
           expect(data).to.equal(null);
           done();

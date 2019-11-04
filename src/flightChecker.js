@@ -15,23 +15,19 @@ function Flight() {
     }
   };
 
-  const formatFlightDetails = (res, airportArg) => {
-    const airport = FileFinder.getFile(airportArg);
-    flightDetails = airport.scrape(res);
-  };
-
   const fetchFlightDetails = (url, airport, callback) => {
     fetch(url)
-      .then(res => res.text())
-      .then(res => {
-        // fs.writeFileSync('gatwickFlightNotFound.json', JSON.stringify(res))
-        formatFlightDetails(res, airport);
+      .then(data => data.text())
+      .then(data => {
+        // fs.writeFileSync('gatwickFlightNotFound.json', JSON.stringify(data))
+        flightDetails = airport.scrape(data);
         returnFlightDetails(callback);
       });
   };
 
-  this.getFlight = (code, callback) => {
-    const { airport, url } = AirportFinder.getUrl(code);
+  this.getFlight = (flightCode, airportCode, callback) => {
+    const url = AirportFinder.getUrl(flightCode, airportCode);
+    const airport = FileFinder.getFile(airportCode);
     fetchFlightDetails(url, airport, callback);
   };
 }
