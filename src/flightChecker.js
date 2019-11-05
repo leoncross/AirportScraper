@@ -17,9 +17,10 @@ function Flight() {
 }
 
 module.exports = Flight;
+
 //
 // flight = new Flight()
 //
-// flight.getFlight('FR2715', 'LGW', (flightDetails) => {
+// flight.getFlight('AA6728', 'LHR', (flightDetails) => {
 //   console.log(flightDetails);
 // })
