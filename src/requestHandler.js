@@ -6,7 +6,6 @@ const fetchData = async (url, flightCode, airport) =>
     fetch(url + flightCode)
       .then(data => data.text())
       .then(data => {
-        // fs.writeFileSync('gatwickFlightNotFound.json', JSON.stringify(data))
         resolve(airport.scrape(data));
       });
   });

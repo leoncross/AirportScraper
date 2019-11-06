@@ -2,11 +2,12 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const puppeteer = require('puppeteer');
+const nock = require('nock');
 
 const expect = chai.expect;
 chai.use(sinonChai);
 
-const airportExample = require('../../src/airports/gatwick');
+const gatwickAirport = require('../../src/airports/gatwick');
 
 const RequestHandler = require('../../src/requestHandler');
 
@@ -18,6 +19,15 @@ describe('Request Handler', () => {
   let puppeteerGoToSpy;
   let puppeteerLaunchStub;
   let airportScrapeStub;
+
+  function setupMockServer(code) {
+    const baseURL = 'https://www.gatwickairport.com';
+    const path = '/flights/departures-results/?flight=';
+
+    nock(baseURL)
+      .get(path + code)
+      .reply(200);
+  }
 
   beforeEach(() => {
     puppeteerCloseSpy = sinon.spy();
@@ -38,7 +48,7 @@ describe('Request Handler', () => {
       }
     });
 
-    airportScrapeStub = sinon.stub(airportExample, 'scrape');
+    airportScrapeStub = sinon.stub(gatwickAirport, 'scrape');
   });
 
   afterEach(() => {
@@ -62,7 +72,7 @@ describe('Request Handler', () => {
 
       airportScrapeStub.returns(expectedFlightDetails);
 
-      const flightDetails = await RequestHandler.getData(type, url, flightCode, airportExample);
+      await RequestHandler.getData(type, url, flightCode, gatwickAirport);
 
       expect(puppeteerLaunchStub).calledOnceWith({ headless: true });
       expect(puppeteerNewPageSpy).calledOnce;
@@ -71,6 +81,7 @@ describe('Request Handler', () => {
       expect(puppeteerGoToSpy).calledOnceWith(url + flightCode, { waitUntil: 'networkidle2' });
       expect(puppeteerCloseSpy).calledOnce;
     });
+
     it('returns expected flight details', async () => {
       const type = 'puppeteer';
       const url = 'exampleUrl';
@@ -87,14 +98,33 @@ describe('Request Handler', () => {
 
       airportScrapeStub.returns(expectedFlightDetails);
 
-      const flightDetails = await RequestHandler.getData(type, url, flightCode, airportExample);
+      const flightDetails = await RequestHandler.getData(type, url, flightCode, gatwickAirport);
 
       expect(flightDetails).to.equal(expectedFlightDetails);
     });
-
   });
 
   context('#Fetch', () => {
-    it('makes expected fetch calls', () => {});
+    it('makes expected fetch calls', async () => {
+      const type = 'fetch';
+      const url = 'https://www.gatwickairport.com/flights/departures-results/?flight=';
+      const flightCode = 'EZY837';
+
+      const expectedFlightDetails = {
+        code: 'EZY837',
+        gate: '55E',
+        status: 'GATE OPEN',
+        terminal: 'North',
+        time: '16:25',
+        to: 'Belfast'
+      };
+
+      airportScrapeStub.returns(expectedFlightDetails);
+      setupMockServer(flightCode, expectedFlightDetails);
+
+      const flightDetails = await RequestHandler.getData(type, url, flightCode, gatwickAirport);
+
+      expect(flightDetails).to.equal(expectedFlightDetails);
+    });
   });
 });

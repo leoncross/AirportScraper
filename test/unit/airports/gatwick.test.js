@@ -1,28 +1,14 @@
 const chai = require('chai');
-// const sinon = require('sinon');
-// const sinonChai = require('sinon-chai');
 
 const gatwickCompleteClone = require('../mockedFetchFiles/gatwickCompleteClone.json');
 const gatwickNoGateClone = require('../mockedFetchFiles/gatwickNoGateClone.json');
 const gatwickFlightNotFound = require('../mockedFetchFiles/gatwickFlightNotFound.json');
 
 const gatwick = require('../../../src/airports/gatwick');
-// chai.use(sinonChai);
 
 const expect = chai.expect;
 
 describe('Gatwick Airport', () => {
-  // let mockFetchCall;
-  //
-  // function setupMockServer(code, returnedValue) {
-  //   const baseURL = 'https://www.gatwickairport.com';
-  //   const path = '/flights/departures-results/?flight=';
-  //
-  //   mockFetchCall = nock(baseURL)
-  //     .get(path + code)
-  //     .reply(200, returnedValue);
-  // }
-
   describe('#scrape', () => {
     // it('makes a fetch request', () => {
     //   const code = 'EZY837';
