@@ -1,10 +1,6 @@
-const fetch = require('node-fetch');
 const cheerio = require('cheerio');
-// const fs = require('fs');
 
-const gatwick = 'https://www.gatwickairport.com/flights/departures-results/?flight=';
-
-const scrape = data => {
+module.exports.scrape = data => {
   const $ = cheerio.load(data);
 
   const flightDetails = {
@@ -19,17 +15,6 @@ const scrape = data => {
   if (flightDetails.gate !== null) {
     flightDetails.gate = flightDetails.gate.trim();
   }
-  return flightDetails;
-};
 
-module.exports.getFlightDetails = flightCode => {
-  const url = gatwick + flightCode;
-  return new Promise(resolve => {
-    fetch(url)
-      .then(data => data.text())
-      .then(data => {
-        // fs.writeFileSync('gatwickFlightNotFound.json', JSON.stringify(data))
-        resolve(scrape(data));
-      });
-  });
+  return flightDetails;
 };

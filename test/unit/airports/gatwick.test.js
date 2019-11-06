@@ -1,7 +1,6 @@
 const chai = require('chai');
 // const sinon = require('sinon');
 // const sinonChai = require('sinon-chai');
-const nock = require('nock');
 
 const gatwickCompleteClone = require('../mockedFetchFiles/gatwickCompleteClone.json');
 const gatwickNoGateClone = require('../mockedFetchFiles/gatwickNoGateClone.json');
@@ -13,30 +12,29 @@ const gatwick = require('../../../src/airports/gatwick');
 const expect = chai.expect;
 
 describe('Gatwick Airport', () => {
-  let mockFetchCall;
-
-  function setupMockServer(code, returnedValue) {
-    const baseURL = 'https://www.gatwickairport.com';
-    const path = '/flights/departures-results/?flight=';
-
-    mockFetchCall = nock(baseURL)
-      .get(path + code)
-      .reply(200, returnedValue);
-  }
+  // let mockFetchCall;
+  //
+  // function setupMockServer(code, returnedValue) {
+  //   const baseURL = 'https://www.gatwickairport.com';
+  //   const path = '/flights/departures-results/?flight=';
+  //
+  //   mockFetchCall = nock(baseURL)
+  //     .get(path + code)
+  //     .reply(200, returnedValue);
+  // }
 
   describe('#scrape', () => {
-    it('makes a fetch request', () => {
-      const code = 'EZY837';
-      setupMockServer(code, null);
+    // it('makes a fetch request', () => {
+    //   const code = 'EZY837';
+    //   setupMockServer(code, null);
+    //
+    //   gatwick.getFlightDetails(code);
+    //
+    //   expect(mockFetchCall.isDone()).to.be.true;
+    // });
 
-      gatwick.getFlightDetails(code);
-
-      expect(mockFetchCall.isDone()).to.be.true;
-    });
-
-    it('finds flight details with gate', async () => {
-      const code = 'EZY837';
-      setupMockServer(code, gatwickCompleteClone);
+    it('finds flight details with gate', () => {
+      // setupMockServer(code, gatwickCompleteClone);
 
       const expectedFlightDetails = {
         code: 'EZY837',
@@ -47,13 +45,12 @@ describe('Gatwick Airport', () => {
         to: 'Belfast'
       };
 
-      const returnedFlightDetails = await gatwick.getFlightDetails(code);
+      const returnedFlightDetails = gatwick.scrape(gatwickCompleteClone);
       expect(returnedFlightDetails).to.deep.equal(expectedFlightDetails);
     });
 
-    it('handles flight details with no gate', async () => {
-      const code = 'TP1337';
-      setupMockServer(code, gatwickNoGateClone);
+    it('handles flight details with no gate', () => {
+      // setupMockServer(code, gatwickNoGateClone);
 
       const expectedFlightDetails = {
         code: 'TP1337',
@@ -64,13 +61,12 @@ describe('Gatwick Airport', () => {
         to: 'Lisbon'
       };
 
-      const returnedFlightDetails = await gatwick.getFlightDetails(code);
+      const returnedFlightDetails = gatwick.scrape(gatwickNoGateClone);
       expect(returnedFlightDetails).to.deep.equal(expectedFlightDetails);
     });
 
-    it('handles no flight details found', async () => {
-      const code = 'flightNotFound';
-      setupMockServer(code, gatwickFlightNotFound);
+    it('handles no flight details found', () => {
+      // setupMockServer(code, gatwickFlightNotFound);
 
       const expectedFlightDetails = {
         code: null,
@@ -81,7 +77,7 @@ describe('Gatwick Airport', () => {
         to: null
       };
 
-      const returnedFlightDetails = await gatwick.getFlightDetails(code);
+      const returnedFlightDetails = gatwick.scrape(gatwickFlightNotFound);
       expect(returnedFlightDetails).to.deep.equal(expectedFlightDetails);
     });
   });

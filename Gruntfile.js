@@ -38,7 +38,7 @@ module.exports = grunt => {
       cover: {
         options: {
           cwd: '.',
-          include: ['src/**/*.js', 'package/**/index.js'],
+          include: ['src/**/*.js'],
           reporter: ['html', 'text'],
           all: true
         },
