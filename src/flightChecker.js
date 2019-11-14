@@ -21,9 +21,9 @@ module.exports = Flight;
 
 // flight = new Flight();
 //
-// // flight.getFlight('BA2762', 'LGW', flightDetails => {
-// //   console.log(flightDetails);
-// // });
+// flight.getFlight('BA2762', 'LGW', flightDetails => {
+//   console.log(flightDetails);
+// });
 // flight.getFlight('AA6728', 'LHR', flightDetails => {
 //   console.log(flightDetails);
 // });

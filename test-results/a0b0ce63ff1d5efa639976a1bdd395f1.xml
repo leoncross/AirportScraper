@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="3.2039999999999997" tests="12" failures="0">
+  <testsuite name="" timestamp="2019-11-14T16:11:25" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Root Suite.Gatwick Airport" timestamp="2019-11-14T16:11:25" tests="0" file="/home/leon.cross/src/lc-playground/flightUpdater/test/unit/airports/gatwick.test.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Root Suite.Gatwick Airport.#scrape" timestamp="2019-11-14T16:11:25" tests="3" file="/home/leon.cross/src/lc-playground/flightUpdater/test/unit/airports/gatwick.test.js" failures="0" time="0.065">
+    <testcase name="finds flight details with gate" time="0.034" classname="Gatwick Airport.#scrape">
+    </testcase>
+    <testcase name="handles flight details with no gate" time="0.02" classname="Gatwick Airport.#scrape">
+    </testcase>
+    <testcase name="handles no flight details found" time="0.011" classname="Gatwick Airport.#scrape">
+    </testcase>
+  </testsuite>
+  <testsuite name="Root Suite.Heathrow Airport" timestamp="2019-11-14T16:11:25" tests="1" file="/home/leon.cross/src/lc-playground/flightUpdater/test/unit/airports/heathrow.test.js" failures="0" time="3.128">
+    <testcase name="finds flight details with gate" time="3.128" classname="Heathrow Airport">
+    </testcase>
+  </testsuite>
+  <testsuite name="Root Suite.File Finder" timestamp="2019-11-14T16:11:28" tests="3" file="/home/leon.cross/src/lc-playground/flightUpdater/test/unit/fileFinder.test.js" failures="0" time="0">
+    <testcase name="returns the gatwick file" time="0" classname="File Finder">
+    </testcase>
+    <testcase name="returns the heathrow file" time="0" classname="File Finder">
+    </testcase>
+    <testcase name="returns null if no airport defined" time="0" classname="File Finder">
+    </testcase>
+  </testsuite>
+  <testsuite name="Root Suite.FlightChecker" timestamp="2019-11-14T16:11:28" tests="0" file="/home/leon.cross/src/lc-playground/flightUpdater/test/unit/flightChecker.test.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Root Suite.FlightChecker.#getFlight" timestamp="2019-11-14T16:11:28" tests="2" file="/home/leon.cross/src/lc-playground/flightUpdater/test/unit/flightChecker.test.js" failures="0" time="0.001">
+    <testcase name="returns object in the callback" time="0.001" classname="FlightChecker.#getFlight">
+    </testcase>
+    <testcase name="returns null when no flight found" time="0" classname="FlightChecker.#getFlight">
+    </testcase>
+  </testsuite>
+  <testsuite name="Root Suite.Request Handler" timestamp="2019-11-14T16:11:28" tests="0" file="/home/leon.cross/src/lc-playground/flightUpdater/test/unit/requestHandler.test.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Root Suite.Request Handler.#Puppeteer" timestamp="2019-11-14T16:11:28" tests="2" file="/home/leon.cross/src/lc-playground/flightUpdater/test/unit/requestHandler.test.js" failures="0" time="0.001">
+    <testcase name="makes expected puppeteer calls" time="0.001" classname="Request Handler.#Puppeteer">
+    </testcase>
+    <testcase name="returns expected flight details" time="0" classname="Request Handler.#Puppeteer">
+    </testcase>
+  </testsuite>
+  <testsuite name="Root Suite.Request Handler.#Fetch" timestamp="2019-11-14T16:11:28" tests="1" file="/home/leon.cross/src/lc-playground/flightUpdater/test/unit/requestHandler.test.js" failures="0" time="0.009">
+    <testcase name="makes expected fetch calls" time="0.009" classname="Request Handler.#Fetch">
+    </testcase>
+  </testsuite>
+</testsuites>

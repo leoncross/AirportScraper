@@ -1,17 +1,17 @@
 const chai = require('chai');
-
 const puppeteer = require('puppeteer');
 
-const heathrow = require('../../../src/airports/heathrow');
-
 const expect = chai.expect;
+
+const heathrow = require('../../../src/airports/heathrow');
 
 describe('Heathrow Airport', () => {
   it('finds flight details with gate', async () => {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
+    const heathrowNoGate = `file://${process.cwd()}/test/unit/mockedPuppeteerFiles/heathrowNoGate.html`;
 
-    await page.goto('file:///home/leon.cross/src/lc-playground/flightUpdater/heathrow.html');
+    await page.goto(heathrowNoGate);
 
     const expectedFlightDetails = {
       time: '11:10',
@@ -22,7 +22,6 @@ describe('Heathrow Airport', () => {
       gate: null
     };
 
-    // console.log(page);
     const returnedFlightDetails = await heathrow.scrape(page);
 
     await browser.close();
